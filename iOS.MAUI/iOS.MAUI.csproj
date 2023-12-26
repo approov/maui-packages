@@ -1,42 +1,35 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-ios</TargetFramework>
+    <TargetFramework>net8.0-ios</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
-    <AssemblyName>ApproovSDK</AssemblyName>
+    <SupportedOSPlatformVersion>11.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Release</OutputPath>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Remove="Approov.xcframework" />
-    <None Remove="Newtonsoft.Json" />
-    <None Remove="ApproovHttpClient" />
-  </ItemGroup>
-  <ItemGroup>
-    <NativeReference Include="Approov.xcframework">
-      <Kind>Framework</Kind>
-    </NativeReference>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="ApproovHttpClient" Version="3.1.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="ApiDefinition.cs" />
-    <Compile Remove="StructsAndEnums.cs" />
-  </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="ApproovHttpClient" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeReference Include="Approov.framework">
+      <Kind>Framework</Kind>
+      <Frameworks>Foundation</Frameworks>
+      <LinkerFlags></LinkerFlags>
+      <WeakFrameworks></WeakFrameworks>
+      <ForceLoad>True</ForceLoad>
+      <NeedsGccExceptionHandling>False</NeedsGccExceptionHandling>
+      <IsCxx>False</IsCxx>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <NoBindingEmbedding>false</NoBindingEmbedding>
+  </PropertyGroup>
 </Project>

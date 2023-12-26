@@ -136,7 +136,7 @@ namespace Approov
         *  or is awaiting user input. Since the initial token fetch is the most
         *  expensive the prefetch seems reasonable.
         */
-        public void Prefetch()
+        public static void Prefetch()
         {
             lock (InitializerLock)
             {
@@ -147,7 +147,7 @@ namespace Approov
             }
         }
 
-        private async Task HandleTokenFetchAsync()
+        private static async Task HandleTokenFetchAsync()
         {
             _ = await Task.Run(() => FetchApproovTokenAndWait("approov.io"));
         }
@@ -446,7 +446,7 @@ namespace Approov
          * @return secure string (should not be cached by your app) or nil if it was not defined or an error ocurred
          * @throws exception with description of cause
          */
-        public string FetchSecureString(string key, string newDef)
+        public static string FetchSecureString(string key, string newDef)
         {
             string type = "lookup";
             if (newDef != null)
@@ -603,6 +603,19 @@ namespace Approov
             ApproovSDK.Approov.SetDataHashInToken(data);
         }
 
+        /**
+        * Sets a development key indicating that the app is a development version and it should
+        * pass attestation even if the app is not registered or it is running on an emulator. The
+        * development key value can be rotated at any point in the account if a version of the app
+        * containing the development key is accidentally released. This is primarily
+        * used for situations where the app package must be modified or resigned in
+        * some way as part of the testing process.
+        *
+        * @param devKey is the development key to be used
+        */
+        public static void SetDevKey(string devKey) { 
+            ApproovSDK.Approov.SetDevKey(devKey);
+        }
 
         /**
          * Gets the signature for the given message. This uses an account specific message signing key that is

@@ -1,4 +1,5 @@
-﻿using ObjCRuntime;
+using ObjCRuntime;
+
 namespace ApproovSDK
 {
     [Native]
@@ -21,6 +22,3 @@ namespace ApproovSDK
         InternalError
     }
 }
-
-
-

@@ -14,25 +14,16 @@
 // ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-using System;
-using System.Net.Http;
 using System.Net.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.IO;
-using Android.Content;
-using Android.Content.Res;
-using System.Collections;
 using static Com.Criticalblue.Approovsdk.Approov;
-using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Java.Lang;
-using Java.Net;
+
 //using Internal;
 using System.Runtime.Intrinsics.Arm;
 
@@ -111,7 +102,7 @@ namespace Approov
         *  or is awaiting user input. Since the initial token fetch is the most
         *  expensive the prefetch seems reasonable.
         */
-        public void Prefetch()
+        public static void Prefetch()
         {
             lock (InitializerLock)
             {
@@ -122,7 +113,7 @@ namespace Approov
             }
         }
 
-        private async Task HandleTokenFetchAsync()
+        private static async Task HandleTokenFetchAsync()
         {
             _ = await Task.Run(() => FetchApproovTokenAndWait("approov.io"));
         }
@@ -581,6 +572,29 @@ namespace Approov
             Com.Criticalblue.Approovsdk.Approov.SetDataHashInToken(data);
         }
 
+        /**
+        * Sets a development key indicating that the app is a development version and it should
+        * pass attestation even if the app is not registered or it is running on an emulator. The
+        * development key value can be rotated at any point in the account if a version of the app
+        * containing the development key is accidentally released. This is primarily
+        * used for situations where the app package must be modified or resigned in
+        * some way as part of the testing process.
+        *
+        * @param devKey is the development key to be used
+        */
+        public static void SetDevKey(string devKey) { 
+            try
+            {
+                Com.Criticalblue.Approovsdk.Approov.SetDevKey(devKey);
+            } catch (Java.Lang.IllegalArgumentException ex)
+            {
+                throw new PermanentException(TAG + "SetDevKey: IllegalArgument " + ex.Message);
+            }
+            catch (Java.Lang.IllegalStateException e)
+            {
+                throw new ApproovException(TAG + "IllegalState: " + e.Message);
+            }
+        }
 
         /**
          * Gets the signature for the given message. This uses an account specific message signing key that is
